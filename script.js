@@ -22,6 +22,9 @@ var hourCount = Object.keys(hourObject).length
 // create dynamic HTML elements over each static hour time period
 Object.values(hourObject).forEach(function(key, val) {
 
+    // load local storage into block description
+    var schedule = localStorage.getItem(key);
+
     var timeBlock = $("<div>")
     .addClass("row time-block");
 
@@ -31,7 +34,8 @@ Object.values(hourObject).forEach(function(key, val) {
 
     var blockDescription = $("<textarea>")
     .addClass("description textarea col-8")
-    .text("");
+    .text("")
+    .val(schedule);
 
     var blockBtn = $("<button>") 
     .addClass("saveBtn far fa-save col")
@@ -56,56 +60,15 @@ Object.values(hourObject).forEach(function(key, val) {
     else if (hourValue < currentHour) {
         $(blockDescription).addClass("past");
     }
+    
+    // save to local storage upon click save button
+    $(blockBtn).on("click", function() {
+ 
+        localStorage.setItem(key, $(blockDescription).val());
+
+    })
 })
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-// this isn't needed
-// description text was clicked
-$("description").on("click", "textarea", function() {
-    var text = $(this)
-        .text()
-        .trim();
-    
-    var textInput = $("<textarea>")
-        .val(text);
-    $(this).replaceWith(textInput);
-
-    schedule[text] = text;
-
-    saveSchedule();
-})
-
-
-
-// load and save to local storage
-var loadSchedule = function() {
-
-    var schedule = JSON.parse(localStorage.getItem("schedule")) || [];
-
-}
-
-var saveSchedule = function() {
-    
-    var schedule = JSON.parse(localStorage.getItem("schedule")) || [];
-
-    var scheduleObj = {
-        description: blockDescription.text
-    }
-    schedule.push(scheduleObj);
-    localStorage.setItem("schedule", JSON.stringify(schedule));
-}
 
 
 
