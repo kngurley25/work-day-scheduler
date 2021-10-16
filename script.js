@@ -5,7 +5,7 @@ var now = moment().format("MMMM DD, YYYY - hh:mm A");
 $("#currentDay")
     .text(now);
 
-// function to loop through workday period object
+// iterate through object of static time periods
 var hourObject = {
     1: "9:00 AM",
     2: "10:00 AM",
@@ -32,9 +32,9 @@ Object.values(hourObject).forEach(function(val) {
         .addClass("hour col")
         .text(val);
 
-    var blockDescription = $("<div>")
+    var blockDescription = $("<textarea>")
         .addClass("description col-8")
-        .text("sample text");
+        .text("");
     
     var blockBtn = $("<div>") 
         .addClass("saveBtn col")
@@ -43,37 +43,23 @@ Object.values(hourObject).forEach(function(val) {
     // append hour div, description div, and save button div to parent row
     timeBlock.append(blockTime, blockDescription, blockBtn);
 
+    // append timeblock row to container
     $(".container").append(timeBlock);
 
 });
 
 
+// local storage persistance for schedule
+var saveSchedule = function() {
+
+    var scheduleData = JSON.parse(localStorage.getItem("schedule-data")) || []; 
+    var scheduleObj = {
+    }
+    scheduleData.push(scheduleObj);
+    localStorage.setItem("schedule-data", JSON.stringify(scheduleData));
+}
+
+saveSchedule();
 
 
-
-
-// // function to create block elements: block, block hour, and block description
-// var createBlock = function(blockDescription, blockTime, timeBlock) {
-
-
-
-    
-//     // create parent element li for individual time block
-//     var blockItem = $("<li>")
-//         .addClass("time-block");
-//     var blockTime = $("<span>")
-//         .addClass("hour")
-//         .text(blockTime);
-//     var blockDescription = $("<p>")
-//         .addClass("description")
-//         .text(blockDescription);
-
-//     // append hour span and description p to parent li
-//     blockItem.append(blockTime, blockDescription);
-
-//     // append to div container on page
-//     $(".container" + timeBlock).append(blockItem);
-// }
-
-// createBlock();
 
