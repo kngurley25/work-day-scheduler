@@ -5,6 +5,7 @@ var now = moment().format("MMMM DD, YYYY - hh:mm A");
 $("#currentDay")
     .text(now);
 
+
 // iterate through object of static time periods
 var hourObject = {
     1: "9:00 AM",
@@ -18,48 +19,76 @@ var hourObject = {
     9: "5:00 PM"
 }
 
-var hours = Object.values(hourObject);
-console.log(hours);
-
-Object.values(hourObject).forEach(val => console.log(val));
-
-Object.values(hourObject).forEach(function(val) {
-
+// function to create dynamic HTML elements
+var createBlock = function(val) {
+    
     var timeBlock = $("<div>")
         .addClass("row time-block align-items-center");
-
-    var blockTime = $("<div>")
+    
+    var blockHour = $("<div>")
         .addClass("hour col")
         .text(val);
-
-    var blockDescription = $("<textarea>")
+    
+    var blockDescription = $("<p>")
         .addClass("description col-8")
-        .text("");
+        .text("sample description text");
     
     var blockBtn = $("<div>") 
         .addClass("saveBtn col")
         .text("sample icon");
-
+    
     // append hour div, description div, and save button div to parent row
-    timeBlock.append(blockTime, blockDescription, blockBtn);
+    timeBlock.append(blockHour, blockDescription, blockBtn);
 
     // append timeblock row to container
     $(".container").append(timeBlock);
-
-});
-
-
-// local storage persistance for schedule
-var saveSchedule = function() {
-
-    var scheduleData = JSON.parse(localStorage.getItem("schedule-data")) || []; 
-    var scheduleObj = {
-    }
-    scheduleData.push(scheduleObj);
-    localStorage.setItem("schedule-data", JSON.stringify(scheduleData));
+    
 }
 
-saveSchedule();
+// create dynamic HTML elements over each static hour time period
+Object.values(hourObject).forEach(function(val) {
+
+    createBlock(val);
+
+})
+
+// description text was clicked
+$("description").on("click", "p", function() {
+    var text = $(this)
+        .text()
+        .trim();
+    
+    var textInput = $("<textarea>")
+        .val(text);
+    $(this).replaceWith(textInput);
+
+    textInput.trigger("focus");
+})
+
+
+
+
+// load and save to local storage
+var loadSchedule = function() {
+
+    var schedule = JSON.parse(localStorage.getItem("schedule")) || [];
+
+    // TODO verify this
+    createBlock(schedule);
+
+}
+
+var saveSchedule = function() {
+    
+    var schedule = localStorage.setItem("schedule", JSON.stringify("schedule")) || [];
+
+    var scheduleObj = {
+        // TODO add description part of time block
+    }
+    schedule.push(scheduleObj);
+    localStorage.setItem("schedule", JSON.stringify(schedule));
+}
+
 
 
 
