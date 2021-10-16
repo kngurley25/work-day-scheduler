@@ -1,5 +1,5 @@
 // display current time and date at header
-var now = moment().format("MMMM DD, YYYY - hh:mm A");
+var now = moment().format("MMMM DD, YYYY");
 // console.log(now);
 
 $("#currentDay")
